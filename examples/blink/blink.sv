@@ -5,6 +5,7 @@ module top(
     output logic    LED
 );
 
+    // CLK frequency is 12MHz, so 6,000,000 cycles is 0.5s
     parameter BLINK_INTERVAL = 6000000;
     logic [$clog2(BLINK_INTERVAL) - 1:0] count = 0;
 

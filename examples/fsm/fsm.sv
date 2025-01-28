@@ -1,7 +1,7 @@
 // Finite State Machine
 
 module fsm #(
-    parameter BLINK_INTERVAL = 6000000, 
+    parameter BLINK_INTERVAL = 6000000,     // CLK freq is 12MHz, so 6,000,000 cycles is 0.5s
     parameter MAX_BLINK_COUNT = 20
 )(
     input logic     clk, 
