@@ -15,14 +15,14 @@ module top #(
 
     fade #(
         .PWM_INTERVAL   (PWM_INTERVAL)
-    ) u0 (
+    ) u1 (
         .clk            (clk), 
         .pwm_value      (pwm_value)
     );
 
     pwm #(
         .PWM_INTERVAL   (PWM_INTERVAL)
-    ) u1 (
+    ) u2 (
         .clk            (clk), 
         .pwm_value      (pwm_value), 
         .pwm_out        (pwm_out)
