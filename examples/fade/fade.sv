@@ -58,7 +58,7 @@ module fade #(
         end
     end
 
-    // Increment / Decrement PWM counters as appropriate given current state
+    // Increment / Decrement PWM value as appropriate given current state
     always_ff @(posedge time_to_inc_dec) begin
         case (current_state)
             PWM_INC:
