@@ -18,9 +18,6 @@ module fade #(
     logic current_state = PWM_INC;
     logic next_state;
 
-    // Declare counter variable for the PWM value
-    logic [$clog2(PWM_INTERVAL) - 1:0] pwm_count = 0;
-
     // Declare variables for timing state transitions
     logic [$clog2(INC_DEC_INTERVAL) - 1:0] count = 0;
     logic [$clog2(INC_DEC_MAX) - 1:0] inc_dec_count = 0;
