@@ -123,7 +123,7 @@ module memory #(
 
     // Handle memory writes
     always_ff @(posedge clk) begin
-        if (write_enable) begin
+        if (write_mem) begin
             if (write_address[31:14] == 18'd0) begin
                 case (funct3)
                     3'b000:
