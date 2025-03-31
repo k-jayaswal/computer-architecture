@@ -89,7 +89,7 @@ module memory #(
         read_data = read_value;
         case (funct3)
             3'b000: begin
-                case (read_address[1:0]):
+                case (read_address[1:0])
                     2'b00:
                         read_data = {{24{read_value[7]}}, read_value[7:0]};
                     2'b01:
@@ -105,7 +105,7 @@ module memory #(
             3'b010:
                 read_data = read_value;
             3'b100: begin
-                case (read_address[1:0]):
+                case (read_address[1:0])
                     2'b00:
                         read_data = {24'd0, read_value[7:0]};
                     2'b01:
