@@ -91,17 +91,17 @@ module memory #(
             3'b000: begin
                 case (read_address[1:0]):
                     2'b00:
-                        read_data = {24{read_value[7]}, read_value[7:0]};
+                        read_data = {{24{read_value[7]}}, read_value[7:0]};
                     2'b01:
-                        read_data = {24{read_value[15]}, read_value[15:8]};
+                        read_data = {{24{read_value[15]}}, read_value[15:8]};
                     2'b10:
-                        read_data = {24{read_value[23]}, read_value[23:16]};
+                        read_data = {{24{read_value[23]}}, read_value[23:16]};
                     2'b11:
-                        read_data = {24{read_value[31]}, read_value[31:24]};
+                        read_data = {{24{read_value[31]}}, read_value[31:24]};
                 endcase
             end
             3'b001:
-                read_data = read_address[1] ? {16{read_value[31]}, read_value[31:16]} : {16{read_value[15]}, read_value[15:0]};
+                read_data = read_address[1] ? {{16{read_value[31]}}, read_value[31:16]} : {{16{read_value[15]}}, read_value[15:0]};
             3'b010:
                 read_data = read_value;
             3'b100: begin
