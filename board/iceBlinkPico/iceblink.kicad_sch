@@ -6254,7 +6254,6 @@
 	)
 	(label "IOT_41a"
 		(at 182.88 125.73 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6265,7 +6264,6 @@
 	)
 	(label "IOB_29b"
 		(at 182.88 95.25 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6276,7 +6274,6 @@
 	)
 	(label "IOB_2a"
 		(at 182.88 44.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6287,7 +6284,6 @@
 	)
 	(label "IOT_51a"
 		(at 182.88 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6298,7 +6294,6 @@
 	)
 	(label "IOT_46b_G0"
 		(at 182.88 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6309,7 +6304,6 @@
 	)
 	(label "IOB_9b"
 		(at 292.1 124.46 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6320,7 +6314,6 @@
 	)
 	(label "IOB_5a"
 		(at 292.1 139.7 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6331,7 +6324,6 @@
 	)
 	(label "IOT_49a"
 		(at 292.1 144.78 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6342,7 +6334,6 @@
 	)
 	(label "IOB_9b"
 		(at 182.88 74.93 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6353,7 +6344,6 @@
 	)
 	(label "IOB_31b"
 		(at 254 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6364,7 +6354,6 @@
 	)
 	(label "IOB_20a"
 		(at 292.1 111.76 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6375,7 +6364,6 @@
 	)
 	(label "IOT_50b"
 		(at 182.88 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6386,7 +6374,6 @@
 	)
 	(label "IOB_0a"
 		(at 182.88 39.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6397,7 +6384,6 @@
 	)
 	(label "IOT_44b"
 		(at 254 139.7 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6408,7 +6394,6 @@
 	)
 	(label "IOT_37a"
 		(at 182.88 110.49 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6419,7 +6404,6 @@
 	)
 	(label "IOB_2a"
 		(at 292.1 132.08 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6430,7 +6414,6 @@
 	)
 	(label "IOT_42b"
 		(at 254 132.08 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6441,7 +6424,6 @@
 	)
 	(label "IOT_39a"
 		(at 182.88 120.65 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6452,7 +6434,6 @@
 	)
 	(label "IOT_43a"
 		(at 254 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6463,7 +6444,6 @@
 	)
 	(label "IOT_41a"
 		(at 254 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6474,7 +6454,6 @@
 	)
 	(label "IOT_45a_G1"
 		(at 182.88 146.05 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6485,7 +6464,6 @@
 	)
 	(label "IOB_3b_G6"
 		(at 182.88 49.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6496,7 +6474,6 @@
 	)
 	(label "RGB1"
 		(at 254 149.86 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6507,7 +6484,6 @@
 	)
 	(label "IOB_31b"
 		(at 182.88 100.33 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6518,7 +6494,6 @@
 	)
 	(label "IOB_5a"
 		(at 182.88 59.69 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6529,7 +6504,6 @@
 	)
 	(label "IOB_4a"
 		(at 292.1 129.54 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6540,7 +6514,6 @@
 	)
 	(label "IOT_38b"
 		(at 182.88 115.57 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6551,7 +6524,6 @@
 	)
 	(label "IOT_36b"
 		(at 182.88 105.41 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6562,7 +6534,6 @@
 	)
 	(label "IOB_8a"
 		(at 182.88 69.85 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6573,7 +6544,6 @@
 	)
 	(label "IOB_20a"
 		(at 182.88 90.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6584,7 +6554,6 @@
 	)
 	(label "RGB2"
 		(at 254 152.4 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6595,7 +6564,6 @@
 	)
 	(label "IOB_6a"
 		(at 292.1 127 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6606,7 +6574,6 @@
 	)
 	(label "IOT_42b"
 		(at 182.88 130.81 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6617,7 +6584,6 @@
 	)
 	(label "IOB_8a"
 		(at 292.1 119.38 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6628,7 +6594,6 @@
 	)
 	(label "IOT_39a"
 		(at 254 124.46 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6639,7 +6604,6 @@
 	)
 	(label "IOT_38b"
 		(at 254 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6650,7 +6614,6 @@
 	)
 	(label "IOB_13b"
 		(at 182.88 80.01 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6661,7 +6624,6 @@
 	)
 	(label "IOT_37a"
 		(at 254 116.84 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6672,7 +6634,6 @@
 	)
 	(label "IOB_13b"
 		(at 292.1 116.84 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6683,7 +6644,6 @@
 	)
 	(label "IOB_4a"
 		(at 182.88 54.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6694,7 +6654,6 @@
 	)
 	(label "RGB0"
 		(at 182.88 176.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6705,7 +6664,6 @@
 	)
 	(label "IOT_45a_G1"
 		(at 292.1 149.86 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6716,7 +6674,6 @@
 	)
 	(label "IOB_3b_G6"
 		(at 292.1 142.24 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6727,7 +6684,6 @@
 	)
 	(label "IOT_36b"
 		(at 254 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6738,7 +6694,6 @@
 	)
 	(label "IOB_18a"
 		(at 182.88 85.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6749,7 +6704,6 @@
 	)
 	(label "RGB2"
 		(at 182.88 186.69 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6760,7 +6714,6 @@
 	)
 	(label "IOT_49a"
 		(at 182.88 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6771,7 +6724,6 @@
 	)
 	(label "IOB_18a"
 		(at 292.1 114.3 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6782,7 +6734,6 @@
 	)
 	(label "IOT_48b"
 		(at 182.88 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6793,7 +6744,6 @@
 	)
 	(label "IOT_44b"
 		(at 182.88 140.97 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6804,7 +6754,6 @@
 	)
 	(label "IOT_48b"
 		(at 292.1 152.4 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6815,7 +6764,6 @@
 	)
 	(label "RGB0"
 		(at 254 144.78 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6826,7 +6774,6 @@
 	)
 	(label "IOT_43a"
 		(at 182.88 135.89 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6837,7 +6784,6 @@
 	)
 	(label "IOT_46b_G0"
 		(at 254 142.24 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6848,7 +6794,6 @@
 	)
 	(label "IOB_0a"
 		(at 292.1 137.16 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6859,7 +6804,6 @@
 	)
 	(label "IOB_6a"
 		(at 182.88 64.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6870,7 +6814,6 @@
 	)
 	(label "RGB1"
 		(at 182.88 181.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6881,7 +6824,6 @@
 	)
 	(label "IOB_29b"
 		(at 254 114.3 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7756,13 +7698,12 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1K"
-			(at 193.04 181.61 90)
+		(property "Value" "5.1K"
+			(at 194.31 181.61 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
@@ -11404,7 +11345,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1.5K"
+		(property "Value" "1K"
 			(at 194.31 176.53 90)
 			(effects
 				(font
