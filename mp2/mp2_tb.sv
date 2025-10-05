@@ -21,7 +21,7 @@ module mp2_tb;
         $dumpfile("mp2.vcd");
         $dumpvars(0, mp2_tb);
         $dumpvars(0, mp2_tb.u0);
-        #108000000;
+        #100000000;
         $finish;
     end
 
