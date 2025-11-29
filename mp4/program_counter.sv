@@ -1,5 +1,5 @@
 module program_counter(
-    input  logic        clk,        /
+    input  logic        clk,        
     input  logic        rst,        // active-high reset
     input  logic [31:0] next_pc,    // next PC
     output logic [31:0] pc          // current PC
