@@ -1,37 +1,53 @@
+// Immediate Generator
+
+// Purpose: Extracts and sign-extends immediate values from instructions.
+//
+// Why this module exists:
+//   Many RISC-V instructions contain constant values (immediates) encoded
+//   directly in the instruction bits. However, these immediates are stored
+//   in different bit positions depending on the instruction type (I, S, B,
+//   U, J). Rather than extracting them in multiple places, we centralize
+//   this logic in one module that handles all five formats correctly.
+//
+// What it does:
+//   - Takes a 32-bit instruction and its opcode
+//   - Identifies the instruction type (I, S, B, U, or J)
+//   - Extracts the immediate from the correct bit positions
+//   - Sign-extends it to 32 bits
+//   - Outputs a ready-to-use immediate value
+    
 module imm_gen(
-    input  logic [31:0] instruction,  
-    input  logic [2:0]  imm_type,     // 0:I, 1:S, 2:B, 3:U, 4:J
-    output logic [31:0] imm           
+    input  logic [31:0] instruction,
+    input  logic [6:0]  opcode,
+    output logic [31:0] imm
 );
 
     always_comb begin
-        case (imm_type)
-            3'd0: begin // I-type
-                // imm[11:0] = instruction[31:20], sign-extended
+        case (opcode)
+            // I-type: ADDI, SLTI, XORI, ORI, ANDI, LW, LH, LB, JALR
+            7'b0010011, 7'b0000011, 7'b1100111:
                 imm = {{20{instruction[31]}}, instruction[31:20]};
-            end
 
-            3'd1: begin // S-type
-                // imm[11:5] = instruction[31:25], imm[4:0] = instruction[11:7]
+            // S-type: SW, SH, SB
+            7'b0100011:
                 imm = {{20{instruction[31]}}, instruction[31:25], instruction[11:7]};
-            end
 
-            3'd2: begin // B-type
-                // imm[12|10:5|4:1|11|0] = {instruction[31], instruction[7], instruction[30:25], instruction[11:8], 0}
-                imm = {{19{instruction[31]}}, instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0};
-            end
+            // B-type: BEQ, BNE, BLT, BGE, BLTU, BGEU
+            7'b1100011:
+                imm = {{19{instruction[31]}}, instruction[31], instruction[7], 
+                       instruction[30:25], instruction[11:8], 1'b0};
 
-            3'd3: begin // U-type
-                // imm[31:12] = instruction[31:12], lower 12 bits zero
+            // U-type: LUI, AUIPC
+            7'b0110111, 7'b0010111:
                 imm = {instruction[31:12], 12'd0};
-            end
 
-            3'd4: begin // J-type
-                // imm[20|10:1|11|19:12|0] = {instruction[31], instruction[19:12], instruction[20], instruction[30:21], 1'b0}
-                imm = {{11{instruction[31]}}, instruction[31], instruction[19:12], instruction[20], instruction[30:21], 1'b0};
-            end
+            // J-type: JAL
+            7'b1101111:
+                imm = {{11{instruction[31]}}, instruction[31], instruction[19:12],
+                       instruction[20], instruction[30:21], 1'b0};
 
-            default: imm = 32'd0;
+            default:
+                imm = 32'd0;
         endcase
     end
 
