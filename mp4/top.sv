@@ -22,60 +22,86 @@
 `include "memory.sv"
 
 module top #(
-    parameter INIT_FILE = "program.hex"  // memory initialization file
+    parameter IMEM_INIT_FILE_PREFIX = "program",  // prefix for instruction memory files
+    parameter DMEM_INIT_FILE_PREFIX = "",         // prefix for data memory files
+    parameter CLK_FREQ = 12000000                  // 12 MHz clock
 )(
     input  logic clk,    
     input  logic rst,     
-    output logic led,   
-    output logic red,  
-    output logic green,  
-    output logic blue   
+    output logic LED,      // user LED (active low on board)
+    output logic RGB_R,    // red LED (active low on board)
+    output logic RGB_G,    // green LED (active low on board)
+    output logic RGB_B     // blue LED (active low on board)
 );
 
-    // CPU to Memory Interface
-    logic [31:0] instr_addr; // address of instruction to fetch
-    logic [31:0] instr_data; // instruction data from memory
+    // CPU to Memory Interface - Instruction Memory
+    logic [31:0] imem_address;     // address of instruction to fetch
+    logic [31:0] imem_data_out;    // instruction data from memory
     
-    // Data Memory Interface (CPU reads/writes data)
-    logic        data_mem_write;  // write enable for data memory
-    logic [2:0]  data_funct3; 
-    logic [31:0] data_write_addr; // address to write to
-    logic [31:0] data_write_data; // data to write 
-    logic [31:0] data_read_addr; // address to read from
-    logic [31:0] data_read_data; // data read from memory
+    // CPU to Memory Interface - Data Memory
+    logic        dmem_wren;        // write enable for data memory
+    logic [2:0]  funct3;           // access size (byte/half/word)
+    logic [31:0] dmem_address;     // address for data memory
+    logic [31:0] dmem_data_in;     // data to write 
+    logic [31:0] dmem_data_out;    // data read from memory
+    
+    // LED signals (active high from memory)
+    logic led_active_high;
+    logic red_active_high;
+    logic green_active_high;
+    logic blue_active_high;
+    
+    // reset from memory (unused but required by memory module)
+    logic memory_reset;
 
+    // instantiate CPU core
     riscv_core cpu(
         .clk(clk),
         .rst(rst),
 
-        .instr_addr(instr_addr),
-        .instr_data(instr_data),
+        // instruction memory interface
+        .imem_address(imem_address),
+        .imem_data_out(imem_data_out),
 
-        .mem_write(data_mem_write),
-        .mem_funct3(data_funct3),
-        .mem_write_addr(data_write_addr),
-        .mem_write_data(data_write_data),
-        .mem_read_addr(data_read_addr),
-        .mem_read_data(data_read_data)
+        // data memory interface
+        .dmem_wren(dmem_wren),
+        .funct3(funct3),
+        .dmem_address(dmem_address),
+        .dmem_data_in(dmem_data_in),
+        .dmem_data_out(dmem_data_out)
     );
     
+    // instantiate memory module
     memory #(
-        .INIT_FILE(INIT_FILE)
+        .IMEM_INIT_FILE_PREFIX(IMEM_INIT_FILE_PREFIX),
+        .DMEM_INIT_FILE_PREFIX(DMEM_INIT_FILE_PREFIX),
+        .CLK_FREQ(CLK_FREQ)
     ) mem(
         .clk(clk),
         
-        .write_mem(data_mem_write),
-        .funct3(data_funct3),
-        .write_address(data_write_addr),
-        .write_data(data_write_data),
-     
-        .read_address(instr_addr),  // during FETCH, read instruction
-        .read_data(instr_data),
+        // data memory interface
+        .funct3(funct3),
+        .dmem_wren(dmem_wren),
+        .dmem_address(dmem_address),
+        .dmem_data_in(dmem_data_in),
+        .dmem_data_out(dmem_data_out),
         
-        .led(led),
-        .red(red),
-        .green(green),
-        .blue(blue)
+        // instruction memory interface
+        .imem_address(imem_address),
+        .imem_data_out(imem_data_out),
+        
+        // peripherals
+        .reset(memory_reset),
+        .led(led_active_high),
+        .red(red_active_high),
+        .green(green_active_high),
+        .blue(blue_active_high)
     );
+
+    // LED output conversion (memory outputs active high, board expects active low)
+    assign LED   = ~led_active_high;
+    assign RGB_R = ~red_active_high;
+    assign RGB_G = ~green_active_high;
+    assign RGB_B = ~blue_active_high;
 
 endmodule

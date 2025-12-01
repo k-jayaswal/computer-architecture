@@ -29,15 +29,17 @@
 module riscv_core(
     input  logic        clk,
     input  logic        rst,
-    output logic [31:0] instr_addr, // address to fetch instruction from
-    input  logic [31:0] instr_data, // instruction fetched from memory
+    
+    // instruction memory interface
+    output logic [31:0] imem_address,      // address to fetch instruction from
+    input  logic [31:0] imem_data_out,     // instruction fetched from memory
 
-    output logic        mem_write, // write enable
-    output logic [2:0]  mem_funct3,      
-    output logic [31:0] mem_write_addr, // address to write to
-    output logic [31:0] mem_write_data, // data to write
-    output logic [31:0] mem_read_addr, // address to read from
-    input  logic [31:0] mem_read_data // data read from memory
+    // data memory interface
+    output logic        dmem_wren,         // write enable
+    output logic [2:0]  funct3,            // access size (byte/half/word)
+    output logic [31:0] dmem_address,      // address for data memory
+    output logic [31:0] dmem_data_in,      // data to write
+    input  logic [31:0] dmem_data_out      // data read from memory
 );
     // PC
     logic [31:0] pc;             
@@ -47,7 +49,7 @@ module riscv_core(
     logic [31:0] instruction;    
     logic [6:0]  opcode;
     logic [4:0]  rd, rs1, rs2;
-    logic [2:0]  funct3;
+    logic [2:0]  funct3_internal;  // internal funct3 (output to memory port)
     logic [6:0]  funct7;
     
     // register file
@@ -70,6 +72,7 @@ module riscv_core(
     logic        ir_write;
     logic        reg_write;
     logic        mem_read;
+    logic        mem_write;
     logic        mem_to_reg;
     logic        alu_src_a;
     logic [1:0]  alu_src_b;
@@ -97,7 +100,7 @@ module riscv_core(
         if (rst)
             instr_reg <= 32'd0;
         else if (ir_write)
-            instr_reg <= instr_data;  // capture instruction during FETCH
+            instr_reg <= imem_data_out;  // capture instruction during FETCH
     end
     
     // splits instruction into fields 
@@ -105,7 +108,7 @@ module riscv_core(
         .instruction(instr_reg),
         .opcode(opcode),
         .rd(rd),
-        .funct3(funct3),
+        .funct3(funct3_internal),
         .rs1(rs1),
         .rs2(rs2),
         .funct7(funct7)
@@ -146,7 +149,7 @@ module riscv_core(
     // what operation ALU should perform
     alu_control alu_ctrl_inst(
         .opcode(opcode),
-        .funct3(funct3),
+        .funct3(funct3_internal),
         .funct7(funct7),
         .alu_op(alu_op)
     );
@@ -173,7 +176,7 @@ module riscv_core(
         if (rst)
             data_reg <= 32'd0;
         else
-            data_reg <= mem_read_data;
+            data_reg <= dmem_data_out;
     end
     
     // generates all control signals
@@ -181,7 +184,7 @@ module riscv_core(
         .clk(clk),
         .rst(rst),
         .opcode(opcode),
-        .funct3(funct3),
+        .funct3(funct3_internal),
         .alu_zero(alu_zero),
         .alu_result(alu_result),
         .pc_write(pc_write),
@@ -251,10 +254,14 @@ module riscv_core(
     end
 
     // MEMORY INTERFACE: connect internal signals to memory ports
-    assign instr_addr = pc;                
-    assign mem_write_addr = alu_out_reg;  
-    assign mem_write_data = b_reg;         
-    assign mem_read_addr = alu_out_reg;   
-    assign mem_funct3 = funct3;         
+    
+    // instruction memory
+    assign imem_address = pc;
+    
+    // data memory
+    assign dmem_address = alu_out_reg;    // address from ALU
+    assign dmem_data_in = b_reg;          // data from rs2
+    assign dmem_wren = mem_write;         // write enable
+    assign funct3 = funct3_internal;      // access size
 
 endmodule
