@@ -22,18 +22,18 @@
 
 module program_counter(
     input  logic        clk,        
-    input  logic        rst,        // active-high reset
-    input  logic        pc_write,   // enable signal for PC update
-    input  logic [31:0] next_pc,    // next PC value
-    output logic [31:0] pc          // current PC
+    input  logic        rst, // active-high reset
+    input  logic        pc_write, // enable signal for PC update
+    input  logic [31:0] next_pc, // next PC value
+    output logic [31:0] pc // current PC value
 );
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            pc <= 32'h00001000;    // reset PC to start of instruction memory (0x1000)
+            pc <= 32'h00001000; // reset PC to start of instruction memory (0x1000)
         end
         else if (pc_write) begin
-            pc <= next_pc;         // update PC only when pc_write is high
+            pc <= next_pc; // update PC only when pc_write is high
         end
     end
 

@@ -19,13 +19,13 @@
 module reg_file(
     input  logic        clk,
     input  logic        rst,
-    input  logic        reg_write,      // 1 = write enabled, 0 = don't write
-    input  logic [4:0]  write_reg,      // which register to write to (0-31)
-    input  logic [31:0] write_data,     // the number to write
-    input  logic [4:0]  read_reg1,      // which register to read (0-31)
-    output logic [31:0] read_data1,     // the number we read
-    input  logic [4:0]  read_reg2,      // which register to read (0-31)
-    output logic [31:0] read_data2      // the number we read
+    input  logic        reg_write, // 1 = write enabled, 0 = don't write
+    input  logic [4:0]  write_reg, // which register to write to (0-31)
+    input  logic [31:0] write_data, // the number to write
+    input  logic [4:0]  read_reg1, // which register to read (0-31)
+    output logic [31:0] read_data1, // the number we read
+    input  logic [4:0]  read_reg2, // which register to read (0-31)
+    output logic [31:0] read_data2 // the number we read
 );
     logic [31:0] registers [0:31];
     integer i;

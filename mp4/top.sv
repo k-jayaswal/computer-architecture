@@ -18,6 +18,9 @@
 //   - Provides LED outputs to the outside world
 //   - Serves as the single entry point for synthesis or simulation
 
+`include "riscv_core.sv"
+`include "memory.sv"
+
 module top #(
     parameter INIT_FILE = "program.hex"  // memory initialization file
 )(
@@ -30,18 +33,18 @@ module top #(
 );
 
     // CPU to Memory Interface
-    logic [31:0] instr_addr;      // address of instruction to fetch
-    logic [31:0] instr_data;      // instruction data from memory
+    logic [31:0] instr_addr; // address of instruction to fetch
+    logic [31:0] instr_data; // instruction data from memory
     
     // Data Memory Interface (CPU reads/writes data)
     logic        data_mem_write;  // write enable for data memory
-    logic [2:0]  data_funct3;     // size
+    logic [2:0]  data_funct3; 
     logic [31:0] data_write_addr; // address to write to
     logic [31:0] data_write_data; // data to write 
-    logic [31:0] data_read_addr;  // address to read from
-    logic [31:0] data_read_data;  // data read from memory
+    logic [31:0] data_read_addr; // address to read from
+    logic [31:0] data_read_data; // data read from memory
 
-    cpu_core cpu(
+    riscv_core cpu(
         .clk(clk),
         .rst(rst),
 

@@ -17,7 +17,7 @@
 `include "alu.sv"
 
 module alu_control(
-    input  logic [6:0] opcode,    // instruction type 
+    input  logic [6:0] opcode, // instruction type 
     input  logic [2:0] funct3,    
     input  logic [6:0] funct7,    
     output alu_op_t    alu_op   
