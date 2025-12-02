@@ -19,12 +19,12 @@
 module reg_file(
     input  logic        clk,
     input  logic        rst,
-    input  logic        reg_write, // 1 = write enabled, 0 = don't write
-    input  logic [4:0]  write_reg, // which register to write to (0-31)
+    input  logic        write_enable, // 1 = write enabled, 0 = don't write
+    input  logic [4:0]  write_address, // which register to write to (0-31)
     input  logic [31:0] write_data, // the number to write
-    input  logic [4:0]  read_reg1, // which register to read (0-31)
+    input  logic [4:0]  read_address1, // which register to read (0-31)
     output logic [31:0] read_data1, // the number we read
-    input  logic [4:0]  read_reg2, // which register to read (0-31)
+    input  logic [4:0]  read_address2, // which register to read (0-31)
     output logic [31:0] read_data2 // the number we read
 );
     logic [31:0] registers [0:31];
@@ -43,13 +43,13 @@ module reg_file(
             end
         end
         
-        else if (reg_write && write_reg != 5'd0) begin // save data to register except for x0
-            registers[write_reg] <= write_data;
+        else if (write_enable && write_address != 5'd0) begin // save data to register except for x0
+            registers[write_address] <= write_data;
         end
     end
 
     // read port 1 and port 2
-    assign read_data1 = (read_reg1 == 5'd0) ? 32'd0 : registers[read_reg1];
-    assign read_data2 = (read_reg2 == 5'd0) ? 32'd0 : registers[read_reg2];
+    assign read_data1 = (read_address1 == 5'd0) ? 32'd0 : registers[read_address1];
+    assign read_data2 = (read_address2 == 5'd0) ? 32'd0 : registers[read_address2];
 
 endmodule

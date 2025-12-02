@@ -40,7 +40,7 @@ module alu_control(
                     10'b0000000_110: alu_op = ALU_OR;    // OR
                     10'b0000000_111: alu_op = ALU_AND;   // AND
                     
-                    default:         alu_op = ALU_COPY;  // pass through if unknown
+                    default: alu_op = ALU_COPY;  // pass through if unknown
                 endcase
             end
             

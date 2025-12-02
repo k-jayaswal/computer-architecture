@@ -180,7 +180,7 @@ module riscv_core(
     end
     
     // generates all control signals
-    control_unit ctrl_inst(
+    fsm_control_unit ctrl_inst(
         .clk(clk),
         .rst(rst),
         .opcode(opcode),
