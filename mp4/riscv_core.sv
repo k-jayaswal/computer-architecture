@@ -22,8 +22,8 @@
 `include "alu_control.sv"
 `include "imm_gen.sv"
 `include "program_counter.sv"
-`include "register_file.sv"
-`include "control_unit.sv"
+`include "reg_file.sv"
+`include "fsm_control_unit.sv"
 `include "decoder.sv"
 
 module riscv_core(
@@ -86,7 +86,6 @@ module riscv_core(
     logic [31:0] a_reg, b_reg;    // store register file outputs
 
     // MODULE INSTANTIATIONS
-
     program_counter pc_inst(
         .clk(clk),
         .rst(rst),
@@ -115,13 +114,13 @@ module riscv_core(
     );
     
     // 32 registers (x0-x31)
-    register_file rf_inst(
+    reg_file rf_inst(
         .clk(clk),
         .rst(rst),
-        .reg_write(reg_write),
-        .read_reg1(rs1),
-        .read_reg2(rs2),
-        .write_reg(rd),
+        .write_enable(reg_write),
+        .read_address1(rs1),
+        .read_address2(rs2),
+        .write_address(rd),
         .write_data(reg_write_data),
         .read_data1(reg_read_data1),
         .read_data2(reg_read_data2)
@@ -220,7 +219,7 @@ module riscv_core(
     // determines the next PC value (00=PC+4, 01=PC+branch_offset, 10=jump_target)
     always_comb begin
         case (pc_source)
-            2'b00: next_pc = alu_result;              // PC + 4 (from ALU)
+            2'b00: next_pc = pc + 4;              // PC + 4 (from ALU)
             2'b01: next_pc = pc + imm;                // PC + branch offset
             2'b10: begin
                 if (opcode == 7'b1100111)              // JALR

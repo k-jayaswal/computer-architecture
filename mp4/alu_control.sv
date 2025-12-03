@@ -14,7 +14,7 @@
 //   - Outputs the appropriate ALU operation code
 //   - Handles all 40+ RISC-V instruction variants
 
-`include "alu.sv"
+`include "alu_types.sv"
 
 module alu_control(
     input  logic [6:0] opcode, // instruction type 

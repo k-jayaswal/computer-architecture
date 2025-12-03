@@ -21,76 +21,63 @@
 `include "riscv_core.sv"
 `include "memory.sv"
 
-module top #(
-    parameter IMEM_INIT_FILE_PREFIX = "program",  // prefix for instruction memory files
-    parameter DMEM_INIT_FILE_PREFIX = "",         // prefix for data memory files
-    parameter CLK_FREQ = 12000000                  // 12 MHz clock
-)(
-    input  logic clk,    
-    input  logic rst,     
-    output logic LED,      // user LED (active low on board)
-    output logic RGB_R,    // red LED (active low on board)
-    output logic RGB_G,    // green LED (active low on board)
-    output logic RGB_B     // blue LED (active low on board)
+module top (
+    input  logic clk,
+    output logic LED,
+    output logic RGB_R,
+    output logic RGB_G,
+    output logic RGB_B
 );
 
-    // CPU to Memory Interface - Instruction Memory
-    logic [31:0] imem_address;     // address of instruction to fetch
-    logic [31:0] imem_data_out;    // instruction data from memory
-    
-    // CPU to Memory Interface - Data Memory
-    logic        dmem_wren;        // write enable for data memory
-    logic [2:0]  funct3;           // access size (byte/half/word)
-    logic [31:0] dmem_address;     // address for data memory
-    logic [31:0] dmem_data_in;     // data to write 
-    logic [31:0] dmem_data_out;    // data read from memory
-    
-    // LED signals (active high from memory)
+    // CPU <-> Memory Interface - Instruction Memory
+    logic [31:0] imem_address;
+    logic [31:0] imem_data_out;
+
+    // CPU <-> Memory Interface - Data Memory
+    logic        dmem_wren;
+    logic [2:0]  funct3;
+    logic [31:0] dmem_address;
+    logic [31:0] dmem_data_in;
+    logic [31:0] dmem_data_out;
+
+    // LED signals from memory (active high)
     logic led_active_high;
     logic red_active_high;
     logic green_active_high;
     logic blue_active_high;
-    
-    // reset from memory (unused but required by memory module)
-    logic memory_reset;
 
-    // instantiate CPU core
+    logic rst = 1'b1; // start with reset asserted
+    logic [4:0] delay_rst = 4'b0000;
+    always_ff@(posedge clk) begin
+        if (delay_rst > 2)
+            rst <= 1'b0; // Deassert reset after the first clock cycle
+            else delay_rst <= delay_rst +1;
+    end
+    // CPU core
     riscv_core cpu(
         .clk(clk),
         .rst(rst),
-
-        // instruction memory interface
         .imem_address(imem_address),
         .imem_data_out(imem_data_out),
-
-        // data memory interface
         .dmem_wren(dmem_wren),
         .funct3(funct3),
         .dmem_address(dmem_address),
         .dmem_data_in(dmem_data_in),
         .dmem_data_out(dmem_data_out)
     );
-    
-    // instantiate memory module
+
+    // memory
     memory #(
-        .IMEM_INIT_FILE_PREFIX(IMEM_INIT_FILE_PREFIX),
-        .DMEM_INIT_FILE_PREFIX(DMEM_INIT_FILE_PREFIX),
-        .CLK_FREQ(CLK_FREQ)
-    ) mem(
+        .IMEM_INIT_FILE_PREFIX("rv32i_test")
+    ) mem (
         .clk(clk),
-        
-        // data memory interface
         .funct3(funct3),
         .dmem_wren(dmem_wren),
         .dmem_address(dmem_address),
         .dmem_data_in(dmem_data_in),
         .dmem_data_out(dmem_data_out),
-        
-        // instruction memory interface
         .imem_address(imem_address),
         .imem_data_out(imem_data_out),
-        
-        // peripherals
         .reset(memory_reset),
         .led(led_active_high),
         .red(red_active_high),
@@ -98,7 +85,7 @@ module top #(
         .blue(blue_active_high)
     );
 
-    // LED output conversion (memory outputs active high, board expects active low)
+    // Active-high memory → active-low board LEDs
     assign LED   = ~led_active_high;
     assign RGB_R = ~red_active_high;
     assign RGB_G = ~green_active_high;

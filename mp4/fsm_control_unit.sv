@@ -176,18 +176,7 @@ module fsm_control_unit(
     // output logic
     always_comb begin
         
-        // default values
-        pc_write = 0;
-        pc_write_cond = 0;
-        ir_write = 0;
-        reg_write = 0;
-        mem_read = 0;
-        mem_write = 0;
-        mem_to_reg = 0;
-        alu_src_a = 0;
-        alu_src_b = 2'b00;
-        pc_source = 2'b00;
-        imm_type = 3'd0;
+  
         
         // control signals
         case (current_state)
@@ -279,6 +268,18 @@ module fsm_control_unit(
             end
 
             default: begin
+                      // default values
+        pc_write = 0;
+        pc_write_cond = 0;
+        ir_write = 0;
+        reg_write = 0;
+        mem_read = 0;
+        mem_write = 0;
+        mem_to_reg = 0;
+        alu_src_a = 0;
+        alu_src_b = 2'b00;
+        pc_source = 2'b01;
+        imm_type = 3'd0;
             end
             
         endcase
