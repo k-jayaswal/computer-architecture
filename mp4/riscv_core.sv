@@ -21,7 +21,6 @@
 `include "alu.sv"
 `include "alu_control.sv"
 `include "imm_gen.sv"
-`include "program_counter.sv"
 `include "reg_file.sv"
 `include "fsm_control_unit.sv"
 `include "decoder.sv"
@@ -43,7 +42,8 @@ module riscv_core(
 );
     // PC
     logic [31:0] pc;             
-    logic [31:0] next_pc;        
+    logic [31:0] next_pc; 
+    logic [31:0] pc_old;      
     
     // instruction fields 
     logic [31:0] instruction;    
@@ -68,7 +68,7 @@ module riscv_core(
     
     // control signals
     logic        pc_write;
-    logic        pc_write_cond;
+    logic        pc_write_old;
     logic        ir_write;
     logic        reg_write;
     logic        mem_read;
@@ -86,14 +86,7 @@ module riscv_core(
     logic [31:0] a_reg, b_reg;    // store register file outputs
 
     // MODULE INSTANTIATIONS
-    program_counter pc_inst(
-        .clk(clk),
-        .rst(rst),
-        .pc_write(pc_write | (pc_write_cond & alu_result[0])),  
-        .next_pc(next_pc),
-        .pc(pc)
-    );
-    
+
     // instruction register: stores the instruction that was just fetched from memory
     always_ff @(posedge clk) begin
         if (rst)
@@ -187,7 +180,6 @@ module riscv_core(
         .alu_zero(alu_zero),
         .alu_result(alu_result),
         .pc_write(pc_write),
-        .pc_write_cond(pc_write_cond),
         .ir_write(ir_write),
         .reg_write(reg_write),
         .mem_read(mem_read),
@@ -199,11 +191,47 @@ module riscv_core(
         .imm_type(imm_type)
     );
 
+    // PC 
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            pc_write_old <= 0;
+            pc <= 32'h00001000;
+        end else begin
+            pc_write_old <= pc_write;
+            if (pc_write) begin
+                pc_old <= pc;    // latch old PC
+            end
+            pc <= next_pc;
+        end
+    end
+
+
+    // determines the next PC value (00=PC+4, 01=PC+branch_offset, 10=jump_target)
+    always_comb begin
+        case (pc_source)
+            2'b00: next_pc = pc_old + 4;              // PC + 4 
+            2'b01: next_pc = pc_old + imm;                // PC + branch offset
+            2'b10: begin
+                if (opcode == 7'b1100111)              // JALR
+                    next_pc = a_reg + imm ;                 // (rs1 + imm) & ~1
+                else                                    // JAL
+                    next_pc = pc_old + imm;                // PC + jump offset
+            end
+            default: next_pc = pc_old + 4;
+        endcase
+    end
+
     // DATAPATH MULTIPLEXERS: selects which data goes where based on control signals
     
     // ALU
     // selects between rs1 and PC for ALU input A (0=rs1, 1=PC)
-    assign alu_a = alu_src_a ? pc : a_reg;
+    always_comb begin
+        case (alu_src_a)
+            2'b00:   alu_a = a_reg;    // rs1
+            2'b01:   alu_a = pc_old;   // PC  
+            default: alu_a = 32'd0;
+        endcase
+    end
     
     // selects what goes into ALU input B (00=rs2, 01=immediate, 10=4)
     always_comb begin
@@ -215,28 +243,12 @@ module riscv_core(
         endcase
     end
     
-    // PC
-    // determines the next PC value (00=PC+4, 01=PC+branch_offset, 10=jump_target)
-    always_comb begin
-        case (pc_source)
-            2'b00: next_pc = pc + 4;              // PC + 4 (from ALU)
-            2'b01: next_pc = pc + imm;                // PC + branch offset
-            2'b10: begin
-                if (opcode == 7'b1100111)              // JALR
-                    next_pc = (a_reg + imm) & ~32'd1;  // (rs1 + imm) & ~1
-                else                                    // JAL
-                    next_pc = pc + imm;                // PC + jump offset
-            end
-            default: next_pc = pc + 32'd4;
-        endcase
-    end
-    
     // Register Write Data
     // selects what data to write back to the register file
     always_comb begin
         if (opcode == 7'b1101111 || opcode == 7'b1100111) begin
             // JAL or JALR: write return address (PC + 4)
-            reg_write_data = pc + 32'd4;
+            reg_write_data = pc + 4;
         end
         else if (opcode == 7'b0110111) begin
             // LUI: write immediate directly
@@ -250,7 +262,7 @@ module riscv_core(
             // arithmetic/logic: write ALU result
             reg_write_data = alu_out_reg;
         end
-    end
+    end  
 
     // MEMORY INTERFACE: connect internal signals to memory ports
     

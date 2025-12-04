@@ -22,7 +22,7 @@ module imm_gen(
     output logic [31:0] imm
 );
 
-   logic [31:0] imm_i_type;
+    logic [31:0] imm_i_type;
     logic [31:0] imm_s_type;
     logic [31:0] imm_b_type;
     logic [31:0] imm_u_type;

@@ -22,9 +22,9 @@ typedef enum logic [4:0] {
     ALU_BGE,    // Branch if Greater or Equal (signed)
     ALU_BLTU,   // Branch if Less Than (unsigned)
     ALU_BGEU,   // Branch if Greater or Equal (unsigned)
-    ALU_JAL,    // Jump and Link (not really used in ALU)
-    ALU_JALR,   // Jump and Link Register (not really used in ALU)
-    ALU_AUIPC   // Add Upper Immediate to PC (not really used in ALU)
+    ALU_JAL,    // Jump and Link
+    ALU_JALR,   // Jump and Link Register
+    ALU_AUIPC   // Add Upper Immediate to PC
 } alu_op_t;
 
 `endif // ALU_TYPES_H

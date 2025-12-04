@@ -50,9 +50,10 @@ module top (
     logic [4:0] delay_rst = 4'b0000;
     always_ff@(posedge clk) begin
         if (delay_rst > 2)
-            rst <= 1'b0; // Deassert reset after the first clock cycle
-            else delay_rst <= delay_rst +1;
+            rst <= 1'b0;
+        else delay_rst <= delay_rst + 1;
     end
+
     // CPU core
     riscv_core cpu(
         .clk(clk),
