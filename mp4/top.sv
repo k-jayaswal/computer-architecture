@@ -49,7 +49,7 @@ module top (
     logic rst = 1'b1; // start with reset asserted
     logic [4:0] delay_rst = 4'b0000;
     always_ff@(posedge clk) begin
-        if (delay_rst > 2)
+        if (delay_rst > 1)
             rst <= 1'b0;
         else delay_rst <= delay_rst + 1;
     end

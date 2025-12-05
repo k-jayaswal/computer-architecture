@@ -59,6 +59,7 @@ module riscv_core(
     
     // immediate generator
     logic [31:0] imm;
+    logic [2:0]  imm_type;
     
     // ALU
     logic [31:0] alu_a, alu_b;  
@@ -74,10 +75,10 @@ module riscv_core(
     logic        mem_read;
     logic        mem_write;
     logic        mem_to_reg;
-    logic        alu_src_a;
+    logic [1:0]  alu_src_a;
     logic [1:0]  alu_src_b;
     logic [1:0]  pc_source;
-    logic [2:0]  imm_type;
+    logic [1:0]  alu_op_source;
     
     // intermediate registers 
     logic [31:0] instr_reg;       // stores fetched instruction
@@ -187,37 +188,30 @@ module riscv_core(
         .mem_to_reg(mem_to_reg),
         .alu_src_a(alu_src_a),
         .alu_src_b(alu_src_b),
-        .pc_source(pc_source),
-        .imm_type(imm_type)
+        .pc_source(pc_source)
     );
 
     // PC 
-    always_ff @(posedge clk or posedge rst) begin
+    always_ff @(posedge clk) begin
         if (rst) begin
-            pc_write_old <= 0;
             pc <= 32'h00001000;
+            pc_old <= 32'h00001000;
         end else begin
-            pc_write_old <= pc_write;
             if (pc_write) begin
-                pc_old <= pc;    // latch old PC
+                pc_old <= pc;
+                pc <= next_pc;
             end
-            pc <= next_pc;
         end
     end
 
-
-    // determines the next PC value (00=PC+4, 01=PC+branch_offset, 10=jump_target)
+    // determines the next PC value
     always_comb begin
         case (pc_source)
-            2'b00: next_pc = pc_old + 4;              // PC + 4 
-            2'b01: next_pc = pc_old + imm;                // PC + branch offset
-            2'b10: begin
-                if (opcode == 7'b1100111)              // JALR
-                    next_pc = a_reg + imm ;                 // (rs1 + imm) & ~1
-                else                                    // JAL
-                    next_pc = pc_old + imm;                // PC + jump offset
-            end
-            default: next_pc = pc_old + 4;
+            2'b00: next_pc = pc + 4;              // PC + 4 
+            2'b01: next_pc = pc + imm;            // PC + branch offset
+            2'b10: next_pc = (a_reg + imm) & ~1;  // JALR
+            2'b11: next_pc = pc_old + imm;                 // JAL
+            default: next_pc = pc + 4;            // PC + 4
         endcase
     end
 
@@ -228,12 +222,13 @@ module riscv_core(
     always_comb begin
         case (alu_src_a)
             2'b00:   alu_a = a_reg;    // rs1
-            2'b01:   alu_a = pc_old;   // PC  
+            2'b01:   alu_a = pc;   // PC  
+            2'b10:   alu_a = pc_old; 
             default: alu_a = 32'd0;
         endcase
     end
     
-    // selects what goes into ALU input B (00=rs2, 01=immediate, 10=4)
+    // selects what goes into ALU input B
     always_comb begin
         case (alu_src_b)
             2'b00:   alu_b = b_reg;    // rs2
@@ -246,23 +241,19 @@ module riscv_core(
     // Register Write Data
     // selects what data to write back to the register file
     always_comb begin
-        if (opcode == 7'b1101111 || opcode == 7'b1100111) begin
-            // JAL or JALR: write return address (PC + 4)
-            reg_write_data = pc + 4;
-        end
-        else if (opcode == 7'b0110111) begin
+    if (opcode == 7'b0110111) begin
             // LUI: write immediate directly
             reg_write_data = imm;
         end
         else if (mem_to_reg) begin
-            // Load instruction: write data from memory
+            // load: write data from memory
             reg_write_data = data_reg;
         end
         else begin
             // arithmetic/logic: write ALU result
             reg_write_data = alu_out_reg;
         end
-    end  
+    end 
 
     // MEMORY INTERFACE: connect internal signals to memory ports
     

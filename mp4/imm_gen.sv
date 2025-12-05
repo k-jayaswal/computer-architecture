@@ -34,8 +34,7 @@ module imm_gen(
                         instruction[31:25],
                         instruction[11:7]};
 
-    assign imm_b_type = {{19{instruction[31]}},
-                        instruction[31],
+    assign imm_b_type = {{20{instruction[31]}},
                         instruction[7],
                         instruction[30:25],
                         instruction[11:8],
@@ -53,16 +52,16 @@ module imm_gen(
         case (opcode)
             7'b0010011,
             7'b0000011,
-            7'b1100111: imm = imm_i_type;
+            7'b1100111: imm = imm_i_type;  // I-type immediate
 
-            7'b0100011: imm = imm_s_type;
+            7'b0100011: imm = imm_s_type;  // S-type immediate
 
-            7'b1100011: imm = imm_b_type;
+            7'b1100011: imm = imm_b_type; // B-type immediate
 
             7'b0110111,
-            7'b0010111: imm = imm_u_type;
+            7'b0010111: imm = imm_u_type; // U-type immediate
 
-            7'b1101111: imm = imm_j_type;
+            7'b1101111: imm = imm_j_type;  // J-type immediate
 
             default:    imm = 32'b0;
         endcase

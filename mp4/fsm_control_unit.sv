@@ -35,11 +35,10 @@ module fsm_control_unit(
     output logic        mem_read, // read from memory?
     output logic        mem_write, // write to memory?
     output logic        mem_to_reg, // what to write to register? 
-    output logic        alu_src_a, // where does ALU input A come from? 
+    output logic [1:0]  alu_src_a, // where does ALU input A come from? 
     output logic [1:0]  alu_src_b, // where does ALU input B come from? 
-    output logic [1:0]  pc_source, // next PC?
-    output logic [2:0]  imm_type 
-);
+    output logic [1:0]  pc_source // next PC?
+    );
 
     // FSM states
     typedef enum logic [3:0] {
@@ -183,16 +182,14 @@ module fsm_control_unit(
         alu_src_a = 2'b00;
         alu_src_b = 2'b00;
         pc_source = 2'b00;
-        imm_type = 3'd0;
   
-        
         // control signals
         case (current_state)
 
             FETCH: begin
                 mem_read = 1;        // turn on memory read
                 ir_write = 1;        // store instruction in IR
-                alu_src_a = 2'b01;       // ALU input A = PC
+                alu_src_a = 2'b01;   // ALU input A = PC
                 alu_src_b = 2'b10;   // ALU input B = 4
                 pc_write = 1;        // update PC
                 pc_source = 2'b00;   // next PC = ALU result (PC + 4)
@@ -200,19 +197,13 @@ module fsm_control_unit(
             
             // just for prepping, no writes
             DECODE: begin
-                alu_src_a = 2'b00;       // ALU input A = rs1 
+                alu_src_a = 2'b00;   // ALU input A = rs1 
                 alu_src_b = 2'b01;   // ALU input B = immediate 
             end
             
             MEMADR: begin
-                alu_src_a = 2'b00;       // ALU input A = rs1 
+                alu_src_a = 2'b00;   // ALU input A = rs1 
                 alu_src_b = 2'b01;   // ALU input B = immediate 
-                
-                // set immediate type based on load or store
-                if (opcode == 7'b0000011)
-                    imm_type = 3'd0;  // I-type immediate (load)
-                else
-                    imm_type = 3'd1;  // S-type immediate (store)
             end
             
             MEMREAD: begin
@@ -229,20 +220,14 @@ module fsm_control_unit(
             end
         
             EXECUTER: begin
-                alu_src_a = 2'b00;       // ALU input A = rs1
+                alu_src_a = 2'b00;   // ALU input A = rs1
                 alu_src_b = 2'b00;   // ALU input B = rs2
             end
         
             EXECUTEI: begin
-                // for AUIPC, use PC; otherwise use rs1
-                alu_src_a = (opcode == 7'b0010111) ? 1'b1 : 1'b0;
+                // for AUIPC, use PC_old; otherwise use rs1
+                alu_src_a = (opcode == 7'b0010111) ? 2'b10 : 2'b00;
                 alu_src_b = 2'b01;  
-
-                // set immediate type
-                if (opcode == 7'b0010111)
-                    imm_type = 3'd3;  // U-type immediate (AUIPC)
-                else
-                    imm_type = 3'd0;  // I-type immediate
             end
             
             ALUWB: begin
@@ -255,27 +240,24 @@ module fsm_control_unit(
                 alu_src_a = 2'b00;   // ALU input A = rs1
                 alu_src_b = 2'b00;   // ALU input B = rs2
                 pc_write = 1;        // update PC
-                if (~alu_zero)
+                if (alu_result[0])   // branch condition met
                     pc_source = 2'b01;   // next PC = PC + branch_offset
                 else
                     pc_source = 2'b00;   // next PC = PC + 4
-                imm_type = 3'd2;     // B-type immediate
             end
            
             JUMP: begin
-                alu_src_a = 2'b01;       // ALU input A = PC
+                alu_src_a = 2'b10;   // ALU input A = PC
                 alu_src_b = 2'b10;   // ALU input B = 4 
                 pc_write = 1;        // update PC
-                pc_source = 2'b10;   // next PC = PC + jump_offset
-                imm_type = 3'd4;     // J-type immediate
+                pc_source = 2'b01;   // next PC
             end
             
             JUMPR: begin
-                alu_src_a = 2'b00;       // ALU input A = return address
-                alu_src_b = 2'b01;   // ALU input B = 4
+                alu_src_a = 2'b10;   // ALU input A = PC
+                alu_src_b = 2'b10;   // ALU input B = 4
                 pc_write = 1;        // update PC
-                pc_source = 2'b10;   // next PC = (rs1 + offset) & ~1
-                imm_type = 3'd0;     // I-type immediate
+                pc_source = 2'b10;   // next PC
             end
             
         endcase
