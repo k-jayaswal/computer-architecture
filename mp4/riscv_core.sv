@@ -95,7 +95,7 @@ module riscv_core(
         else if (ir_write)
             instr_reg <= imem_data_out;  // capture instruction during FETCH
     end
-    
+
     // splits instruction into fields 
     decoder dec_inst(
         .instruction(instr_reg),
@@ -197,9 +197,9 @@ module riscv_core(
             pc <= 32'h00001000;
             pc_old <= 32'h00001000;
         end else begin
-            if (pc_write) begin
-                pc_old <= pc;
+            if (ir_write) begin
                 pc <= next_pc;
+                pc_old <= pc;
             end
         end
     end
@@ -207,11 +207,10 @@ module riscv_core(
     // determines the next PC value
     always_comb begin
         case (pc_source)
-            2'b00: next_pc = pc + 4;              // PC + 4 
-            2'b01: next_pc = pc + imm;            // PC + branch offset
-            2'b10: next_pc = (a_reg + imm) & ~1;  // JALR
-            2'b11: next_pc = pc_old + imm;                 // JAL
-            default: next_pc = pc + 4;            // PC + 4
+            2'b00: next_pc = pc + 4;             
+            2'b01: next_pc = pc + imm;            
+            2'b10: next_pc = (a_reg + imm) & ~1;  
+            default: next_pc = pc + 4;            
         endcase
     end
 
@@ -238,8 +237,7 @@ module riscv_core(
         endcase
     end
     
-    // Register Write Data
-    // selects what data to write back to the register file
+    // ALUWB writeback logic
     always_comb begin
     if (opcode == 7'b0110111) begin
             // LUI: write immediate directly

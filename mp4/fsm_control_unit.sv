@@ -225,7 +225,7 @@ module fsm_control_unit(
             end
         
             EXECUTEI: begin
-                // for AUIPC, use PC_old; otherwise use rs1
+                // for AUIPC, use PC; otherwise use rs1
                 alu_src_a = (opcode == 7'b0010111) ? 2'b10 : 2'b00;
                 alu_src_b = 2'b01;  
             end
