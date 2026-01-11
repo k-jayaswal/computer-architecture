@@ -37,7 +37,8 @@ module fsm_control_unit(
     output logic        mem_to_reg, // what to write to register? 
     output logic [1:0]  alu_src_a, // where does ALU input A come from? 
     output logic [1:0]  alu_src_b, // where does ALU input B come from? 
-    output logic [1:0]  pc_source // next PC?
+    output logic [1:0]  pc_source, // next PC?
+    output logic [3:0]  state // for debugging purposes
     );
 
     // FSM states
@@ -262,5 +263,7 @@ module fsm_control_unit(
             
         endcase
     end
+
+    assign state = current_state;
 
 endmodule
